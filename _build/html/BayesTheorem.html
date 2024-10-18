@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Probability and Bayes’ theorem &#8212; MPP001 Research Methods</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'BayesTheorem';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="A Brief Introduction to Parameter Estimation the Bayesian way" href="ParamEst2.html" />
+    <link rel="prev" title="Introduction to Bayesian Data Analysis" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="MPP001 Research Methods - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="MPP001 Research Methods - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction to Bayesian Data Analysis
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Probability and Bayes’ theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ParamEst2.html">A Brief Introduction to Parameter Estimation the Bayesian way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSelection.html">A (very) Brief Introduction to Model Selection the Bayesian way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PracticalBayes1.html">Getting Bayes Done</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/drsimonmartin/PythonTutorial" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/drsimonmartin/PythonTutorial/issues/new?title=Issue%20on%20page%20%2FBayesTheorem.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/BayesTheorem.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Probability and Bayes’ theorem</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-probability">Conditional Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayes-theorem-and-marginalisation">Bayes’ Theorem and Marginalisation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#marginalisation">Marginalisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="probability-and-bayes-theorem">
+<h1>Probability and Bayes’ theorem<a class="headerlink" href="#probability-and-bayes-theorem" title="Permalink to this heading">#</a></h1>
+<p>Bayes’ theorem is a powerful, yet simple, piece of maths that allows us to ask questions of the form: ‘What is the probability that a model is correct given that we have this data?’</p>
+<p>Probability can be considered as being a measure of how likely a specific event (e.g. a flipped coin comes up heads, a covid test gives a false negative, etc.) is to occur. Typically we assign a number to this probability - with zero corresponding to the event will not happen, and a value of one guaranteeing that it will happen.</p>
+<p>In many areas of science and engineering we want to be able to assess how well a model fits some data (or what parameter values give the best fit to some data). In probality terms this is asking what is the probability that the model is right given the data? However, we can’t measure this probability. What we can measure is the related question: what is the probability of the data given a model? Bayes’ theorem provides a logical link between the two questions and importantly a</p>
+<section id="conditional-probability">
+<h2>Conditional Probability<a class="headerlink" href="#conditional-probability" title="Permalink to this heading">#</a></h2>
+<p>The probability that event <span class="math notranslate nohighlight">\(A\)</span> will happen notwithstanding any other events is given by:</p>
+<div class="math notranslate nohighlight">
+\[P(A)\]</div>
+<p>The probability that event <span class="math notranslate nohighlight">\(A\)</span> will happen given that some other event (<span class="math notranslate nohighlight">\(B\)</span>) has occured is</p>
+<div class="math notranslate nohighlight">
+\[P(A|B)\]</div>
+<p>This is an example of <em>conditional probability</em>.</p>
+<p>Using this notation, there are a couple of important probability results that we need moving forward. First:</p>
+<div class="math notranslate nohighlight" id="equation-probsum">
+<span class="eqno">(1)<a class="headerlink" href="#equation-probsum" title="Permalink to this equation">#</a></span>\[P(A|I) + P(\bar{A}|I) = 1\]</div>
+<p>The bar is a logical <span class="math notranslate nohighlight">\(not\)</span> operation. Equation <a class="reference internal" href="#equation-probsum">(1)</a> tells us that probabilities of events predicted must add to one. Note, <span class="math notranslate nohighlight">\(I\)</span> is commonly used to represent all the background information relevant to the system. The second result is:</p>
+<div class="math notranslate nohighlight" id="equation-joint">
+<span class="eqno">(2)<a class="headerlink" href="#equation-joint" title="Permalink to this equation">#</a></span>\[P(A,B|I) = P(A|B,I)P(B|I)\]</div>
+<p>Here the comma indicates the logical and operation. This equation tells us that the probability of both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> occuring given <span class="math notranslate nohighlight">\(I\)</span> is the probability that <span class="math notranslate nohighlight">\(A\)</span> happens given <span class="math notranslate nohighlight">\(B\)</span> has happened multiplied by the probability of <span class="math notranslate nohighlight">\(B\)</span> occuring.</p>
+</section>
+<section id="bayes-theorem-and-marginalisation">
+<h2>Bayes’ Theorem and Marginalisation<a class="headerlink" href="#bayes-theorem-and-marginalisation" title="Permalink to this heading">#</a></h2>
+<p>We can also write:</p>
+<div class="math notranslate nohighlight" id="equation-joint2">
+<span class="eqno">(3)<a class="headerlink" href="#equation-joint2" title="Permalink to this equation">#</a></span>\[P(B,A|I) = P(B|A,I)P(A|I)\]</div>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are independant events then equations <a class="reference internal" href="#equation-joint">(2)</a> and <a class="reference internal" href="#equation-joint2">(3)</a> must be equal and we can equate the right hand sides of these equations:</p>
+<div class="math notranslate nohighlight">
+\[P(A|B,I)P(B|I)=P(B|A,I)P(A|I)\]</div>
+<p>Which rearranges to give us Bayes’ theorem:</p>
+<div class="math notranslate nohighlight" id="equation-bayes">
+<span class="eqno">(4)<a class="headerlink" href="#equation-bayes" title="Permalink to this equation">#</a></span>\[P(A|B,I)=\frac{P(B|A,I)P(A|I)}{P(B|I)}\]</div>
+<p>To see why this unprepossessing equation is so useful, replace <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> by <span class="math notranslate nohighlight">\(hypothesis\)</span> and <span class="math notranslate nohighlight">\(data\)</span> respectively:</p>
+<div class="math notranslate nohighlight" id="equation-bayesprop">
+<span class="eqno">(5)<a class="headerlink" href="#equation-bayesprop" title="Permalink to this equation">#</a></span>\[P(hypothesis|data,I)\propto P(data|hypothesis,I)P(hypothesis)\]</div>
+<p>This tells us that the probability of the hypothesis (i.e. the model of the data) given the data obtained which is something we cannot measure/assess is proportional to the product of the probability that the hypothesis would give that data multiplied by the probability of the hypothesis.</p>
+<p>The components of <a class="reference internal" href="#equation-bayes">(4)</a> have special terminology associated with them:</p>
+<p><span class="math notranslate nohighlight">\(P(A|B,I)\rightarrow\textnormal{Posterior probability}\)</span></p>
+<p><span class="math notranslate nohighlight">\(P(B|A,I)\rightarrow\textnormal{Likelihood}\)</span></p>
+<p><span class="math notranslate nohighlight">\(P(A|I)\rightarrow\textnormal{Prior probability}\)</span></p>
+<p><span class="math notranslate nohighlight">\(P(B|I)\rightarrow\textnormal{Evidence}\)</span></p>
+<p>As you get more familiar with Bayesian methods this terminology will make more sense. However, it is worth spending a moment to consider the Prior probability. This term tells us that it contains what we know about the system before the measurement being considered was made. One of the powerful aspects of bayesian methods is that we can update our calculation when new information/data is arrived at. We can use the posterior probability from one iteration as the prior probability for the next.</p>
+<section id="marginalisation">
+<h3>Marginalisation<a class="headerlink" href="#marginalisation" title="Permalink to this heading">#</a></h3>
+<p>It can be shown (e.g. Lambert<span id="id1">[<a class="reference internal" href="intro.html#id74" title="Ben Lambert. A Student's Guide to Bayesian Statistics. SAGE, Los Angeles London New Delhi Singapore Washington DC Melbourne, 2018. ISBN 978-1-4739-1635-7 978-1-4739-1636-4.">Lam18</a>]</span>) that equations <a class="reference internal" href="#equation-joint">(2)</a> and <a class="reference internal" href="#equation-probsum">(1)</a> can be used to give the following result:</p>
+<div class="math notranslate nohighlight" id="equation-margn">
+<span class="eqno">(6)<a class="headerlink" href="#equation-margn" title="Permalink to this equation">#</a></span>\[ P(X|I) = \int\limits_{-\infty}^{\infty}P(X,Y|I)dY\]</div>
+<p>Thus, the evidence for a particular parameter can be found by integrating over the other parameters of the system. This is known as <em>marginalisation</em>. This is one of the key advantages of bayesian analysis over frequentist approaches. In the later it is often extremely difficult if not impossible to remove the effect of what are known as <em>nuisance</em> parameters.</p>
+</section>
+<section id="next-steps">
+<h3>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h3>
+<p>We now have the basic relations that we need to start doing Bayesian analysis. The chapters that follow will illustrate how to use these in order to do science and engineering relevent data analysis. Parameter estimation will be introduced first followed by a look at model selection.</p>
+</section>
+</section>
+<section id="bibliography">
+<h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">#</a></h2>
+<div class="docutils container" id="id2">
+<dl class="citation">
+<dt class="label" id="id73"><span class="brackets"><a class="fn-backref" href="#id1">Lam18</a></span></dt>
+<dd><p>Ben Lambert. <em>A Student's Guide to Bayesian Statistics</em>. SAGE, Los Angeles London New Delhi Singapore Washington DC Melbourne, 2018. ISBN 978-1-4739-1635-7 978-1-4739-1636-4.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Bayesian Data Analysis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ParamEst2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">A Brief Introduction to Parameter Estimation the Bayesian way</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-probability">Conditional Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayes-theorem-and-marginalisation">Bayes’ Theorem and Marginalisation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#marginalisation">Marginalisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Simon Martin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024-25.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

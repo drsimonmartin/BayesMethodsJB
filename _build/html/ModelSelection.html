@@ -1,0 +1,688 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>A (very) Brief Introduction to Model Selection the Bayesian way &#8212; MPP001 Research Methods</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ModelSelection';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Bayes Done" href="PracticalBayes1.html" />
+    <link rel="prev" title="A Brief Introduction to Parameter Estimation the Bayesian way" href="ParamEst2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="MPP001 Research Methods - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="MPP001 Research Methods - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction to Bayesian Data Analysis
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BayesTheorem.html">Probability and Bayes’ theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ParamEst2.html">A Brief Introduction to Parameter Estimation the Bayesian way</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">A (very) Brief Introduction to Model Selection the Bayesian way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PracticalBayes1.html">Getting Bayes Done</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/drsimonmartin/PythonTutorial" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/drsimonmartin/PythonTutorial/issues/new?title=Issue%20on%20page%20%2FModelSelection.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/ModelSelection.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>A (very) Brief Introduction to Model Selection the Bayesian way</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#occam-s-razor-factor">Occam’s razor factor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reducing-overfitting">Reducing overfitting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="a-very-brief-introduction-to-model-selection-the-bayesian-way">
+<h1>A (very) Brief Introduction to Model Selection the Bayesian way<a class="headerlink" href="#a-very-brief-introduction-to-model-selection-the-bayesian-way" title="Permalink to this heading">#</a></h1>
+<p>In some scenarios there can be more than one model that reproduces the data (within limits set by the uncertainty in the measurements). Bayes’ theorem provides an objective way to determine whether one of these should be prefered over the other.</p>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this heading">#</a></h2>
+<p>The following section borrows heavily from Sivia et al.’s paper <code class="docutils literal notranslate"><span class="pre">An</span> <span class="pre">introduction</span> <span class="pre">to</span> <span class="pre">Bayesian</span> <span class="pre">model</span> <span class="pre">selection</span></code> <span id="id1">[<a class="reference internal" href="#id135" title="D.S. Sivia, W.I.F. David, K.S. Knight, and S.F. Gull. An introduction to Bayesian model selection. Physica D: Nonlinear Phenomena, 66(1-2):234–242, June 1993. https://linkinghub.elsevier.com/retrieve/pii/016727899390241R. doi:10.1016/0167-2789(93)90241-R.">SDKG93</a>]</span> which contains  examples from a range of science/engineering applications including X-ray diffraction and nmr. Another very useful reference is David MacKay’s <code class="docutils literal notranslate"><span class="pre">Bayesian</span> <span class="pre">Interpolation</span></code> <span id="id2">[<a class="reference internal" href="#id92" title="David J. C. MacKay. Bayesian Interpolation. Neural Computation, 4(3):415–447, May 1992. https://doi.org/10.1162/neco.1992.4.3.415. doi:10.1162/neco.1992.4.3.415.">Mac92</a>]</span>.</p>
+<div class="admonition-consider-the-following-question admonition">
+<p class="admonition-title">Consider the following question:</p>
+<p>In the R&amp;D department of Acme Ltd two of the leading researchers, Mr A and Mrs B, have competing theories (models) for the increased failure rate of the latest <a class="reference external" href="https://www.youtube.com/watch?v=Hsv4IYKtC3o">Acme Rocket Powered Roller Skates</a>. Mrs B’s theorem has an adjustable parameter <span class="math notranslate nohighlight">\(\lambda\)</span> in contrast Mr A’s model has no parameters. Who’s theory should be preferred given the available data <span class="math notranslate nohighlight">\(D\)</span>?</p>
+</div>
+<p>To tackle this problem we need to calculate the following ratio:</p>
+<div class="math notranslate nohighlight">
+\[ R = \frac{\textrm{Probability that Mrs B is correct}}{\textrm{Probability that Mr A is correct}} \]</div>
+<p>If this ratio is very large then we prefer Mrs B’s theory, if it is very much less than one then Mr A’s theory is preferred. For values between 1 and 100 then the isn’t strong evidence either way and more data (or better models) will be required.</p>
+<p>Using Bayes’ theorem we can write our ratio as:</p>
+<div class="math notranslate nohighlight" id="equation-probratios">
+<span class="eqno">(11)<a class="headerlink" href="#equation-probratios" title="Permalink to this equation">#</a></span>\[\frac{\textrm{prob}(B|D)}{\textrm{prob}(A|D)} = \frac{\textrm{prob}(B)}{\textrm{prob}(A)}\times\frac{\textrm{prob}(D|B)}{\textrm{prob}(D|A)} \]</div>
+<p>The first term on the right handside of equation <a class="reference internal" href="#equation-probratios">(11)</a> (the <code class="docutils literal notranslate"><span class="pre">prior</span> <span class="pre">odds</span> <span class="pre">ratio</span></code>) is the ratio of the prior probabilities of the theories. In the absence of other information we could take this as one, or it could be based on the researchers track records…</p>
+<p>The second term is known as the <code class="docutils literal notranslate"><span class="pre">Bayes</span> <span class="pre">Factor</span></code> and it tell us about how the prior odds ratio is updated in the light of the data (evidence).</p>
+<p>The second term on the right hand side of Equation <a class="reference internal" href="#equation-probratios">(11)</a> has a hidden complication. Remember that Mrs B’s theory has a parameter <span class="math notranslate nohighlight">\(\lambda\)</span> - this does not appear in Equation <a class="reference internal" href="#equation-probratios">(11)</a> so we need to use equation <a class="reference internal" href="BayesTheorem.html#equation-margn">(6)</a> to integrate (marginalise) this nuisance parameter away.</p>
+<div class="math notranslate nohighlight" id="equation-probd">
+<span class="eqno">(12)<a class="headerlink" href="#equation-probd" title="Permalink to this equation">#</a></span>\[\begin{split} \textrm{prob}(B|D) &amp;= \int \textrm{prob}(D,\lambda|B)d\lambda\\
+&amp;=  \int \textrm{prob}(D|\lambda,B)\textrm{prob}(\lambda|B)d\lambda\end{split}\]</div>
+<p>The first term in the integral is a likelihood function as we saw in the coin flipping problem. The second term is Mrs B’s prior for the parameter <span class="math notranslate nohighlight">\(\lambda\)</span>. For this example we will assume that there is an optimum value, <span class="math notranslate nohighlight">\(\lambda_0\)</span> that lies in the range <span class="math notranslate nohighlight">\(\lambda_{low}\rightarrow\lambda_{high}\)</span>, and that there is a uniform probability in that range with zero probability outside of it. The height of the prior will be given by:</p>
+<div class="math notranslate nohighlight" id="equation-mrsbprior">
+<span class="eqno">(13)<a class="headerlink" href="#equation-mrsbprior" title="Permalink to this equation">#</a></span>\[\textrm{prob}(\lambda|B)=\frac{1}{\lambda_{high}-\lambda_{low}}\]</div>
+<p>Notice that equation <a class="reference internal" href="#equation-mrsbprior">(13)</a> is normalised and that there must be finite limits for the parameters or the probability will go to zero.</p>
+<p>For simplicity we will assume that there is one value of the parameter that corresponds to the optimum value (<span class="math notranslate nohighlight">\(\lambda_0\)</span>) and that in the region (<span class="math notranslate nohighlight">\(\lambda\pm\delta\)</span>) of this optimum value the probability of this data is given by a gaussian:</p>
+<div class="math notranslate nohighlight" id="equation-pdata">
+<span class="eqno">(14)<a class="headerlink" href="#equation-pdata" title="Permalink to this equation">#</a></span>\[\textrm{prob}(D|\lambda,B) = \textrm{prob}(D|\lambda_0,B)\times\exp\left[-\frac{(\lambda-\lambda_0)^2}{2\delta\lambda^2}\right]\]</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot of uniform prior for Mrs B&#39;s model</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">mticker</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="c1"># set parameters</span>
+<span class="n">l1</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">l2</span> <span class="o">=</span> <span class="mi">750</span>
+<span class="n">l0</span> <span class="o">=</span> <span class="mi">600</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">prior</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">l2</span><span class="o">-</span><span class="n">l1</span><span class="p">)</span>
+
+<span class="c1"># range</span>
+<span class="n">xstart</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">xend</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># plot</span>
+<span class="c1"># create figure</span>
+<span class="k">with</span> <span class="n">plt</span><span class="o">.</span><span class="n">xkcd</span><span class="p">():</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xstart</span><span class="p">,</span> <span class="n">xend</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="c1"># draw prior</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">l1</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">l2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">prior</span><span class="p">,</span> <span class="n">prior</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dashes</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mrs B&#39;s Prior&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Likelihood&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Parameter value&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Probability density&#39;</span><span class="p">)</span>
+    <span class="c1"># Turn off tick labels</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="c1">#label key points</span>
+    <span class="n">xticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">l1</span><span class="p">,</span><span class="n">l0</span><span class="p">,</span><span class="n">l2</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span>
+    <span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\lambda_</span><span class="si">{low}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\lambda_0$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\lambda_</span><span class="si">{high}</span><span class="s2">$&quot;</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">x_labels</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<figure class="align-default" id="id157">
+<img alt="_images/4dfa80e331804f2f64ee9adc4c84c4e029e89efb60d336840f8aae865fdb24d7.png" src="_images/4dfa80e331804f2f64ee9adc4c84c4e029e89efb60d336840f8aae865fdb24d7.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Probability densities for the parameter’s prior and the Likelihood</span><a class="headerlink" href="#id157" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The prior does not have a functional dependance on <span class="math notranslate nohighlight">\(\lambda\)</span> which allows us to rewrite equation <a class="reference internal" href="#equation-probd">(12)</a> as</p>
+<div class="math notranslate nohighlight" id="equation-probd2">
+<span class="eqno">(15)<a class="headerlink" href="#equation-probd2" title="Permalink to this equation">#</a></span>\[ \textrm{prob}(B|D) = \frac{1}{\lambda_{high}-\lambda_{low}}\int_{\lambda_{low}}^{\lambda_{high}} \textrm{prob}(D|\lambda,B)d\lambda\]</div>
+<p>As long as the limits o the prior do not cause significant truncation (cut-off) to the gaussian likelihood then it can be shown that the integral will have the form: <span class="math notranslate nohighlight">\(\delta\lambda\sqrt{2\pi}\times\textrm{prob}(D|\lambda_0,B)\)</span>. Which gives us:</p>
+<div class="math notranslate nohighlight" id="equation-probd3">
+<span class="eqno">(16)<a class="headerlink" href="#equation-probd3" title="Permalink to this equation">#</a></span>\[ \textrm{prob}(B|D) = \frac{\delta\lambda\sqrt{2\pi}\times\textrm{prob}(D|\lambda_0,B)}{\lambda_{high}-\lambda_{low}}\]</div>
+<p>We can use equation <a class="reference internal" href="#equation-probd3">(16)</a> to write equation <a class="reference internal" href="#equation-probratios">(11)</a> as the product of three terms:</p>
+<div class="math notranslate nohighlight" id="equation-probratios2">
+<span class="eqno">(17)<a class="headerlink" href="#equation-probratios2" title="Permalink to this equation">#</a></span>\[\frac{\textrm{prob}(B|D)}{\textrm{prob}(A|D)} = \frac{\textrm{prob}(B)}{\textrm{prob}(A)}\times\frac{\textrm{prob}(D|\lambda_0,B)}{\textrm{prob}(D|A)}\times\frac{\delta\lambda\sqrt{2\pi}}{\lambda_{high}-\lambda_{low}}\]</div>
+<p>The first term on the RHS of <a class="reference internal" href="#equation-probratios2">(17)</a> is the ratio of our prior preferences for the models. In many cases we can take this as unity. The second term is a measure of how well the models fit the data relative to each other. This will always favour Mrs B’s model-for a wide enough range of <span class="math notranslate nohighlight">\(\lambda\)</span> there will always be some value that beats the parameter free model. The third term moderates this effect - it scales the ratio by the allowed range of the parameter - if this range is significantly greater than the uncertainty <span class="math notranslate nohighlight">\(\delta\lambda\)</span> then Mr A’s model wins.</p>
+<section id="occam-s-razor-factor">
+<h3>Occam’s razor factor<a class="headerlink" href="#occam-s-razor-factor" title="Permalink to this heading">#</a></h3>
+<p>The third term in <a class="reference internal" href="#equation-probratios2">(17)</a> is sometimes referred to as the <code class="docutils literal notranslate"><span class="pre">Occam's</span> <span class="pre">Razor</span> <span class="pre">Factor</span></code><span id="id3">[<a class="reference internal" href="#id134" title="D. S. Sivia and J. Skilling. Data Analysis - a Bayesian Tutorial. Oxford Science Publications. Oxford University Press, 2 edition, 2006.">SS06</a>]</span>. This is because it favours simpler models over complicated ones when all other things are equal.</p>
+</section>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Permalink to this heading">#</a></h2>
+<p>Choosing between a parameter free model and a single parameter model is unlikely to come up often in engineering and science applications. Comparing models with a range of paremeters is a much more likely scenario. Fortunately, it is possible to make use of most of the algebraic shenanigans above.</p>
+<p>Let’s looks the case where both models have a single parameter (<span class="math notranslate nohighlight">\(\mu\)</span> for Mr A’s model). Providing that the assumptions about the models/parameters invoked above hold for Mr A’s model then it can be shown that equation <a class="reference internal" href="#equation-probratios2">(17)</a> is modified to:</p>
+<div class="math notranslate nohighlight" id="equation-probratios3">
+<span class="eqno">(18)<a class="headerlink" href="#equation-probratios3" title="Permalink to this equation">#</a></span>\[\frac{\textrm{prob}(B|D)}{\textrm{prob}(A|D)} = \frac{\textrm{prob}(B)}{\textrm{prob}(A)}\times\frac{\textrm{prob}(D|\lambda_0,B)}{\textrm{prob}(D|\mu_0,A)}\times\frac{\mu_{high}-\mu_{low}}{\lambda_{high}-\lambda_{low}}\]</div>
+<p>An example of an application of this analysis is differentiating between the use of a gaussian lineshape and a lorentzian one for a spectral peak where there is some free parameter (e.g. the amplitude) that requires optimising.</p>
+<section id="reducing-overfitting">
+<h3>Reducing overfitting<a class="headerlink" href="#reducing-overfitting" title="Permalink to this heading">#</a></h3>
+<p>AIC (and BIC) are essentially heuristics with no substantial foundation. The Bayesian method described above is significantly more principled…</p>
+<p>The paper by Sivia et al. <span id="id4">[<a class="reference internal" href="#id135" title="D.S. Sivia, W.I.F. David, K.S. Knight, and S.F. Gull. An introduction to Bayesian model selection. Physica D: Nonlinear Phenomena, 66(1-2):234–242, June 1993. https://linkinghub.elsevier.com/retrieve/pii/016727899390241R. doi:10.1016/0167-2789(93)90241-R.">SDKG93</a>]</span> goes into some quantative examples of applying the model selection process outlined above to real data. Rather than calulate the ratios of <a class="reference internal" href="#equation-probratios3">(18)</a> they take the equivalent step of plotting the maximum values of the posterior probability densities which has the added advantage of allowing the reader to judge whether the best value is significantly different from those around it.</p>
+<p>Stephen Gull shows an instructive example based on this methodology <span id="id5">[<a class="reference internal" href="#id58" title="Stephen F. Gull. Bayesian Inductive Inference and Maximum Entropy. In Gary J. Erickson and C. Ray Smith, editors, Maximum-Entropy and Bayesian Methods in Science and Engineering, pages 53–74. Springer Netherlands, Dordrecht, 1988. doi:10.1007/978-94-009-3049-0_4.">Gul88</a>]</span>. In this example a dataset formed from a sum of polynomials is analysed to work out the highest order polynomial used to make the data. The results of this are shown in <a class="reference internal" href="#nparams-fig"><span class="std std-numref">Fig. 3</span></a>.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1">#read data from csv file, add column titles</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;GullPolynomial.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NParam&#39;</span><span class="p">,</span><span class="s1">&#39;logProb&#39;</span><span class="p">])</span>
+<span class="c1"># line plot of the data, xticks set to ensure integer values</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;NParam&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;logProb&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Number of Parameters&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Log(prob(Model))&#39;</span><span class="p">,</span><span class="n">xticks</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Nparams.png&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<figure class="align-default" id="nparams-fig">
+<img alt="_images/Nparams.png" src="_images/Nparams.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Posterior Probability distribution for fits to a polynomial fit - adapted from <span id="id6">[<a class="reference internal" href="#id58" title="Stephen F. Gull. Bayesian Inductive Inference and Maximum Entropy. In Gary J. Erickson and C. Ray Smith, editors, Maximum-Entropy and Bayesian Methods in Science and Engineering, pages 53–74. Springer Netherlands, Dordrecht, 1988. doi:10.1007/978-94-009-3049-0_4.">Gul88</a>]</span>. There is a maximum at polynomial of order 10. Note that the y-axis is logarithmic.</span><a class="headerlink" href="#nparams-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition">
+<p class="admonition-title">Exercise–come back to this when you have got the hang of pyMC</p>
+<p>Apply the method of Gull <span id="id7">[<a class="reference internal" href="#id58" title="Stephen F. Gull. Bayesian Inductive Inference and Maximum Entropy. In Gary J. Erickson and C. Ray Smith, editors, Maximum-Entropy and Bayesian Methods in Science and Engineering, pages 53–74. Springer Netherlands, Dordrecht, 1988. doi:10.1007/978-94-009-3049-0_4.">Gul88</a>, <a class="reference internal" href="#id135" title="D.S. Sivia, W.I.F. David, K.S. Knight, and S.F. Gull. An introduction to Bayesian model selection. Physica D: Nonlinear Phenomena, 66(1-2):234–242, June 1993. https://linkinghub.elsevier.com/retrieve/pii/016727899390241R. doi:10.1016/0167-2789(93)90241-R.">SDKG93</a>]</span> to some polynomial data and deduce the order of polynomial that best fits your data.</p>
+</div>
+</section>
+</section>
+<section id="bibliography">
+<h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">#</a></h2>
+<div class="docutils container" id="id8">
+<dl class="citation">
+<dt class="label" id="id58"><span class="brackets">Gul88</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id6">2</a>,<a href="#id7">3</a>)</span></dt>
+<dd><p>Stephen F. Gull. Bayesian Inductive Inference and Maximum Entropy. In Gary J. Erickson and C. Ray Smith, editors, <em>Maximum-Entropy and Bayesian Methods in Science and Engineering</em>, pages 53–74. Springer Netherlands, Dordrecht, 1988. <a class="reference external" href="https://doi.org/10.1007/978-94-009-3049-0_4">doi:10.1007/978-94-009-3049-0_4</a>.</p>
+</dd>
+<dt class="label" id="id92"><span class="brackets"><a class="fn-backref" href="#id2">Mac92</a></span></dt>
+<dd><p>David J. C. MacKay. Bayesian Interpolation. <em>Neural Computation</em>, 4(3):415–447, May 1992. https://doi.org/10.1162/neco.1992.4.3.415. <a class="reference external" href="https://doi.org/10.1162/neco.1992.4.3.415">doi:10.1162/neco.1992.4.3.415</a>.</p>
+</dd>
+<dt class="label" id="id134"><span class="brackets"><a class="fn-backref" href="#id3">SS06</a></span></dt>
+<dd><p>D. S. Sivia and J. Skilling. <em>Data Analysis - a Bayesian Tutorial</em>. Oxford Science Publications. Oxford University Press, 2 edition, 2006.</p>
+</dd>
+<dt class="label" id="id135"><span class="brackets">SDKG93</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id7">3</a>)</span></dt>
+<dd><p>D.S. Sivia, W.I.F. David, K.S. Knight, and S.F. Gull. An introduction to Bayesian model selection. <em>Physica D: Nonlinear Phenomena</em>, 66(1-2):234–242, June 1993. https://linkinghub.elsevier.com/retrieve/pii/016727899390241R. <a class="reference external" href="https://doi.org/10.1016/0167-2789(93)90241-R">doi:10.1016/0167-2789(93)90241-R</a>.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ParamEst2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">A Brief Introduction to Parameter Estimation the Bayesian way</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="PracticalBayes1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Getting Bayes Done</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#occam-s-razor-factor">Occam’s razor factor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reducing-overfitting">Reducing overfitting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Simon Martin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024-25.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
