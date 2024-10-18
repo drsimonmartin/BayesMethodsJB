@@ -16,6 +16,7 @@ Thumbs.db
 sandbox
 _build/latex
 _build/jupyter_execute
+_build/.doctrees
 
 
 # python related
